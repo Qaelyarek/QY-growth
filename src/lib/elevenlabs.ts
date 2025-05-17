@@ -24,6 +24,7 @@ export const initializeElevenLabs = () => {
     const client = {
       voices: {
         async getAll() {
+          console.log('Fetching available voices...');
           const response = await fetch('https://api.elevenlabs.io/v1/voices', {
             headers: {
               'xi-api-key': env.ELEVENLABS_API_KEY
@@ -34,7 +35,9 @@ export const initializeElevenLabs = () => {
             throw new Error(`Failed to fetch voices: ${response.statusText}`);
           }
           
-          return response.json();
+          const voices = await response.json();
+          console.log('Available voices:', voices);
+          return voices;
         }
       },
       textToSpeech: {
@@ -74,6 +77,19 @@ export const initializeElevenLabs = () => {
   } catch (error) {
     console.error('Failed to initialize ElevenLabs client:', error);
     return null;
+  }
+};
+
+export const listVoices = async (): Promise<Voice[]> => {
+  const client = initializeElevenLabs();
+  if (!client) return [];
+  
+  try {
+    const voices = await client.voices.getAll();
+    return voices;
+  } catch (error) {
+    console.error('Failed to fetch voices:', error);
+    return [];
   }
 };
 
