@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Mic, MicOff, MessageSquare, Volume2, Bot, Loader2 } from 'lucide-react';
 import { generateSpeech } from '../lib/elevenlabs';
+import { generateResponse } from '../lib/openai';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 interface VoiceAssistantProps {
@@ -133,69 +134,29 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
     }
   };
 
-  const getAIResponse = (userInput: string): Promise<string> => {
-    setIsProcessing(true);
-    
-    // Simulate API call delay
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const lowercaseInput = userInput.toLowerCase();
-        let response = '';
-
-        // Simple rule-based responses
-        if (lowercaseInput.includes('hello') || lowercaseInput.includes('hi')) {
-          response = "Hello! I'm the QYGrowth AI Voice Agent. I can help you learn about our voice technology services including inbound and outbound calling, SMS, and chat solutions. What would you like to know?";
-        } 
-        else if (lowercaseInput.includes('what') && (lowercaseInput.includes('do') || lowercaseInput.includes('service'))) {
-          response = "We offer advanced AI Voice Agent solutions for businesses. This includes inbound call handling, outbound sales calls, SMS integration, and website chat capabilities. Our AI systems can handle customer inquiries, qualify leads, and book appointments 24/7 without human intervention.";
-        }
-        else if (lowercaseInput.includes('price') || lowercaseInput.includes('cost') || lowercaseInput.includes('quote')) {
-          response = "Our AI Voice solutions start at $1,000 per month for basic configurations. We offer scalable pricing based on call volume and features needed. For a custom quote based on your specific business needs, I can connect you with our solutions team. Would you like me to arrange that?";
-        }
-        else if (lowercaseInput.includes('booking') || lowercaseInput.includes('schedule') || lowercaseInput.includes('appointment') || lowercaseInput.includes('call')) {
-          response = "I'd be happy to schedule a strategy call with our team. They can provide a personalized demo of our AI voice system and discuss how it can help your business. Would you prefer a morning or afternoon appointment?";
-        }
-        else if (lowercaseInput.includes('morning')) {
-          response = "Great! I've noted your preference for a morning call. Can I get your name and the best email to reach you for scheduling confirmation?";
-        }
-        else if (lowercaseInput.includes('afternoon') || lowercaseInput.includes('evening')) {
-          response = "Perfect! I've noted your preference for an afternoon call. Can I get your name and the best email to reach you for scheduling confirmation?";
-        }
-        else if (lowercaseInput.includes('@') || lowercaseInput.includes('email')) {
-          response = "Thank you! I've recorded your contact information. A member of our team will email you shortly with available time slots for your strategy call about our voice technology. Is there anything specific you'd like them to prepare for the demonstration?";
-        }
-        else if (lowercaseInput.includes('lead') || lowercaseInput.includes('generation')) {
-          response = "Our Voice-powered Lead Generation system can qualify prospects, answer common questions, and book appointments automatically. It works through phone calls, SMS, and website chat, all using the same AI brain. Would you like to know more about how our voice technology handles lead qualification?";
-        }
-        else if (lowercaseInput.includes('how') && lowercaseInput.includes('work')) {
-          response = "Our AI Voice system works by integrating with your phone system, allowing AI to handle inbound calls and make outbound calls. The technology understands natural language, maintains context throughout conversations, and can transfer to human agents when needed. It also integrates with SMS and chat for a unified communication experience. Would you like to see a demonstration?";
-        }
-        else if (lowercaseInput.includes('thank you') || lowercaseInput.includes('thanks')) {
-          response = "You're welcome! It's been a pleasure demonstrating our voice technology today. Is there anything else you'd like to know about our voice services?";
-        }
-        else if (lowercaseInput.includes('no') && (lowercaseInput.includes('thank') || lowercaseInput.includes('that') || lowercaseInput.includes('all'))) {
-          response = "Thank you for your interest in QYGrowth AI Voice solutions. We look forward to potentially working with you to transform your business communications. Have a great day!";
-        }
-        else {
-          response = "That's an interesting question about " + userInput.split(' ').slice(0, 3).join(' ') + "... Our AI Voice systems can handle a wide range of business needs including customer service, sales outreach, and lead qualification through voice, SMS, and chat. Would you like me to arrange a demonstration with our team for your specific requirements?";
-        }
-
-        setIsProcessing(false);
-        resolve(response);
-      }, 1500);
-    });
-  };
-
   const processUserInput = async (input: string) => {
     // Add user message
     setMessages(prev => [...prev, { type: 'user', text: input }]);
     
-    // Get and add AI response
-    const aiResponse = await getAIResponse(input);
-    setMessages(prev => [...prev, { type: 'ai', text: aiResponse }]);
+    setIsProcessing(true);
     
-    // Speak the response
-    speakText(aiResponse);
+    try {
+      // Get AI response using OpenAI
+      const aiResponse = await generateResponse(input);
+      
+      // Add AI response to messages
+      setMessages(prev => [...prev, { type: 'ai', text: aiResponse }]);
+      
+      // Speak the response
+      await speakText(aiResponse);
+    } catch (error) {
+      console.error('Error processing user input:', error);
+      const errorMessage = "I apologize, but I'm having trouble processing your request. Please try again.";
+      setMessages(prev => [...prev, { type: 'ai', text: errorMessage }]);
+      await speakText(errorMessage);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
