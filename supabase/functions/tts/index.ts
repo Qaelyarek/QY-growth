@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 // Temporarily inline the API key for testing
-const ELEVENLABS_API_KEY = 'sk-11072a699447cc88c1787f84ded3e039094221442cb0acea';
+const ELEVENLABS_API_KEY = '5a67406130edbc115086ce8059bdc58e8ca6b46c5420b2cb';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
