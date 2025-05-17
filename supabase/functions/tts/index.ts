@@ -6,9 +6,6 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-// Temporarily inline the API key for testing
-const ELEVENLABS_API_KEY = '5a67406130edbc115086ce8059bdc58e8ca6b46c5420b2cb';
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -33,8 +30,13 @@ serve(async (req) => {
     const VOICE_ID = voice_id || 'agent_01jvepganyex89bnx4dcaf7qtg';
     const MODEL_ID = model_id || 'eleven_turbo_v2';
     
+    const apiKey = Deno.env.get('ELEVENLABS_API_KEY');
+    if (!apiKey) {
+      throw new Error('ELEVENLABS_API_KEY environment variable is not set');
+    }
+    
     console.log('Making request to ElevenLabs API');
-    console.log('API Key present:', !!ELEVENLABS_API_KEY);
+    console.log('API Key present:', !!apiKey);
     
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
@@ -43,7 +45,7 @@ serve(async (req) => {
         headers: {
           'Accept': 'audio/mpeg',
           'Content-Type': 'application/json',
-          'xi-api-key': ELEVENLABS_API_KEY,
+          'xi-api-key': apiKey,
         },
         body: JSON.stringify({
           text,
