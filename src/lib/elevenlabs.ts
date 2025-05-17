@@ -45,6 +45,7 @@ export const initializeElevenLabs = () => {
         }) {
           console.log('Converting text to speech:', options.text);
           console.log('Using voice ID:', voiceId);
+          console.log('Using API key:', env.ELEVENLABS_API_KEY ? 'Present' : 'Missing');
           
           const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
             method: 'POST',
