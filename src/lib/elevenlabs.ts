@@ -44,6 +44,7 @@ export const initializeElevenLabs = () => {
           voice_settings: VoiceSettings;
         }) {
           console.log('Converting text to speech:', options.text);
+          console.log('Using voice ID:', voiceId);
           
           const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
             method: 'POST',
@@ -58,7 +59,9 @@ export const initializeElevenLabs = () => {
           console.log('ElevenLabs API Response:', response);
           
           if (!response.ok) {
-            throw new Error(`Failed to generate speech: ${response.statusText}`);
+            const errorText = await response.text();
+            console.error('ElevenLabs API error response:', errorText);
+            throw new Error(`Failed to generate speech: ${response.statusText}\nDetails: ${errorText}`);
           }
           
           return response.arrayBuffer();
@@ -74,8 +77,14 @@ export const initializeElevenLabs = () => {
 };
 
 export const generateSpeech = async (text: string, voiceId: string): Promise<ArrayBuffer | null> => {
+  console.log('Initializing speech generation...');
+  console.log('API Key present:', !!env.ELEVENLABS_API_KEY);
+  
   const client = initializeElevenLabs();
-  if (!client) return null;
+  if (!client) {
+    console.warn('ElevenLabs client initialization failed');
+    return null;
+  }
   
   try {
     console.log('Generating speech for text:', text);
