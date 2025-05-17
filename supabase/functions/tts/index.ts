@@ -6,13 +6,19 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
+// Temporarily inline the API key for testing
+const ELEVENLABS_API_KEY = 'sk-11072a699447cc88c1787f84ded3e039094221442cb0acea';
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    console.log('TTS Edge Function: Received request');
+    
     const { text, voice_id, model_id, voice_settings } = await req.json();
+    console.log('Request payload:', { text, voice_id, model_id });
 
     if (!text) {
       return new Response(
@@ -27,10 +33,8 @@ serve(async (req) => {
     const VOICE_ID = voice_id || 'agent_01jvepganyex89bnx4dcaf7qtg';
     const MODEL_ID = model_id || 'eleven_turbo_v2';
     
-    const apiKey = Deno.env.get('ELEVENLABS_API_KEY');
-    if (!apiKey) {
-      throw new Error('ELEVENLABS_API_KEY environment variable is not set');
-    }
+    console.log('Making request to ElevenLabs API');
+    console.log('API Key present:', !!ELEVENLABS_API_KEY);
     
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
@@ -39,7 +43,7 @@ serve(async (req) => {
         headers: {
           'Accept': 'audio/mpeg',
           'Content-Type': 'application/json',
-          'xi-api-key': apiKey,
+          'xi-api-key': ELEVENLABS_API_KEY,
         },
         body: JSON.stringify({
           text,
@@ -53,10 +57,12 @@ serve(async (req) => {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`ElevenLabs API error: ${JSON.stringify(error)}`);
+      const error = await response.text();
+      console.error('ElevenLabs API error:', error);
+      throw new Error(`ElevenLabs API error: ${error}`);
     }
 
+    console.log('Successfully received audio from ElevenLabs');
     const audioBuffer = await response.arrayBuffer();
     
     return new Response(audioBuffer, {
