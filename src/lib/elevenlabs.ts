@@ -43,25 +43,25 @@ export const initializeElevenLabs = () => {
           model_id: string;
           voice_settings: VoiceSettings;
         }) {
-          console.log('Converting text to speech:', options.text);
-          console.log('Using voice ID:', voiceId);
-          console.log('Using API key:', env.ELEVENLABS_API_KEY ? 'Present' : 'Missing');
+          console.log('Converting text to speech via Edge Function');
           
-          const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+          const response = await fetch(`${env.SUPABASE_URL}/functions/v1/tts`, {
             method: 'POST',
             headers: {
-              'Accept': 'audio/mpeg',
               'Content-Type': 'application/json',
-              'xi-api-key': env.ELEVENLABS_API_KEY
+              'Authorization': `Bearer ${env.SUPABASE_ANON_KEY}`
             },
-            body: JSON.stringify(options)
+            body: JSON.stringify({
+              text: options.text,
+              voice_id: voiceId,
+              model_id: options.model_id,
+              voice_settings: options.voice_settings
+            })
           });
-          
-          console.log('ElevenLabs API Response:', response);
           
           if (!response.ok) {
             const errorText = await response.text();
-            console.error('ElevenLabs API error response:', errorText);
+            console.error('TTS Edge Function error:', errorText);
             throw new Error(`Failed to generate speech: ${response.statusText}\nDetails: ${errorText}`);
           }
           
