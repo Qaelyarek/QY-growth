@@ -14,10 +14,9 @@ interface ElevenLabsClient {
   };
 }
 
-// Initialize the ElevenLabs client with the API key
 export const initializeElevenLabs = () => {
   if (!isElevenLabsConfigured()) {
-    console.error('ElevenLabs API key is not set. Voice features will not work properly.');
+    console.warn('ElevenLabs API key is not set. Falling back to Web Speech API.');
     return null;
   }
   
@@ -30,6 +29,11 @@ export const initializeElevenLabs = () => {
               'xi-api-key': env.ELEVENLABS_API_KEY
             }
           });
+          
+          if (!response.ok) {
+            throw new Error(`Failed to fetch voices: ${response.statusText}`);
+          }
+          
           return response.json();
         }
       },
@@ -48,6 +52,11 @@ export const initializeElevenLabs = () => {
             },
             body: JSON.stringify(options)
           });
+          
+          if (!response.ok) {
+            throw new Error(`Failed to generate speech: ${response.statusText}`);
+          }
+          
           return response.arrayBuffer();
         }
       }
@@ -60,22 +69,7 @@ export const initializeElevenLabs = () => {
   }
 };
 
-// Get available voices
-export const getVoices = async () => {
-  const client = initializeElevenLabs();
-  if (!client) return [];
-  
-  try {
-    const voices = await client.voices.getAll();
-    return voices;
-  } catch (error) {
-    console.error('Failed to fetch voices:', error);
-    return [];
-  }
-};
-
-// Helper for generating speech from text
-export const generateSpeech = async (text: string, voiceId: string) => {
+export const generateSpeech = async (text: string, voiceId: string): Promise<ArrayBuffer | null> => {
   const client = initializeElevenLabs();
   if (!client) return null;
   

@@ -5,5 +5,5 @@ export const env = {
 };
 
 export const isElevenLabsConfigured = () => {
-  return !!env.ELEVENLABS_API_KEY;
+  return !!env.ELEVENLABS_API_KEY && env.ELEVENLABS_API_KEY.length > 0;
 };
