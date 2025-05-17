@@ -95,5 +95,3 @@ export const generateSpeech = async (text: string, voiceId: string) => {
     return null;
   }
 };
-
-export { generateSpeech }
