@@ -1,5 +1,18 @@
-import { elevenlabs as ElevenLabsClient } from 'elevenlabs';
+import { Voice, VoiceSettings } from 'elevenlabs-node';
 import { env, isElevenLabsConfigured } from './env';
+
+interface ElevenLabsClient {
+  voices: {
+    getAll(): Promise<Voice[]>;
+  };
+  textToSpeech: {
+    convert(voiceId: string, options: {
+      text: string;
+      model_id: string;
+      voice_settings: VoiceSettings;
+    }): Promise<ArrayBuffer>;
+  };
+}
 
 // Initialize the ElevenLabs client with the API key
 export const initializeElevenLabs = () => {
@@ -9,11 +22,38 @@ export const initializeElevenLabs = () => {
   }
   
   try {
-    const client = new ElevenLabsClient({
-      apiKey: env.ELEVENLABS_API_KEY
-    });
+    const client = {
+      voices: {
+        async getAll() {
+          const response = await fetch('https://api.elevenlabs.io/v1/voices', {
+            headers: {
+              'xi-api-key': env.ELEVENLABS_API_KEY
+            }
+          });
+          return response.json();
+        }
+      },
+      textToSpeech: {
+        async convert(voiceId: string, options: {
+          text: string;
+          model_id: string;
+          voice_settings: VoiceSettings;
+        }) {
+          const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'audio/mpeg',
+              'Content-Type': 'application/json',
+              'xi-api-key': env.ELEVENLABS_API_KEY
+            },
+            body: JSON.stringify(options)
+          });
+          return response.arrayBuffer();
+        }
+      }
+    };
     
-    return client;
+    return client as ElevenLabsClient;
   } catch (error) {
     console.error('Failed to initialize ElevenLabs client:', error);
     return null;
@@ -55,3 +95,5 @@ export const generateSpeech = async (text: string, voiceId: string) => {
     return null;
   }
 };
+
+export { generateSpeech }
