@@ -1,0 +1,18 @@
+# Netlify configuration file
+[build]
+  command = "npm run build"
+  publish = "dist"
+  
+# Handle SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Environment variable declarations (values set in Netlify UI)
+[build.environment]
+  # Just declaring variables here, actual values set in Netlify UI
+  VITE_SUPABASE_URL = "placeholder"
+  VITE_SUPABASE_ANON_KEY = "placeholder"
+  # Optional
+  VITE_ELEVENLABS_API_KEY = "placeholder"

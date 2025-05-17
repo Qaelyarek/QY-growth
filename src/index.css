@@ -1,0 +1,442 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* Typewriter Animation */
+.typewriter-logo-container {
+  position: relative;
+  height: 1.5em;
+  min-width: 150px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.typewriter-text {
+  color: #FFFFFF;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: #39FF14;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Static Logo Styling */
+.static-logo-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.static-logo-base {
+  background: linear-gradient(
+    to right,
+    #4285f4 0%, 
+    #34a853 25%, 
+    #fbbc05 50%, 
+    #ea4335 75%,
+    #4285f4 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.static-logo-glow {
+  background: linear-gradient(
+    to right,
+    #4285f4 0%, 
+    #34a853 25%, 
+    #fbbc05 50%, 
+    #ea4335 75%,
+    #4285f4 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  filter: blur(4px) brightness(1.2);
+  opacity: 0.7;
+  text-shadow: 
+    0 0 10px rgba(66, 133, 244, 0.8),
+    0 0 20px rgba(66, 133, 244, 0.4);
+  mix-blend-mode: overlay;
+  z-index: -1;
+}
+
+/* Ensure text-shimmer animations run smoothly */
+.text-shimmer-effect {
+  position: relative;
+  z-index: 5; 
+  pointer-events: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+  perspective: 1000px; /* Improve rendering performance */
+  isolation: isolate; /* Create stacking context */
+}
+
+/* Add styles for the booking widget */
+.booking-widget-container {
+  width: 100%;
+  min-height: 900px;
+  position: relative;
+  margin: 0 auto;
+  max-width: 900px;
+  overflow: visible;
+}
+
+.booking-widget-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  overflow: visible;
+}
+
+@media (max-width: 640px) {
+  .booking-widget-container {
+    min-height: 950px;
+  }
+  
+  .booking-widget-container iframe {
+    transform: scale(0.95);
+    transform-origin: top center;
+  }
+}
+
+@keyframes cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(57, 255, 20, 0.2);
+    text-shadow: 0 0 2px rgba(57, 255, 20, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
+  }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-fadeOut {
+  animation: fadeOut 2s forwards;
+}
+
+.typewriter {
+  overflow: visible;
+  white-space: normal;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.typewriter::after {
+  content: '|';
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+  animation: cursor 1s infinite;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400;
+}
+
+.glow-effect {
+  @apply relative;
+}
+
+.glow-effect::after {
+  content: '';
+  @apply absolute inset-0 blur-xl -z-10;
+  background: transparent;
+}
+
+.hover-underline {
+  @apply relative;
+}
+
+.hover-underline::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-px bg-blue-400 transition-all duration-300;
+}
+
+.hover-underline:hover::after {
+  @apply w-full;
+}
+
+.pulsating-button {
+  animation: pulse-glow 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.pulsating-button:hover {
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+}
+
+/* Fixed background setup */
+.hero-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
+spline-viewer {
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  opacity: 1;
+}
+
+/* Content layering */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  min-height: 100vh;
+}
+
+.nav-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(120px + 8rem);
+}
+
+/* Hero section specific spacing */
+.hero-section {
+  min-height: calc(100vh - 120px);
+  padding: 8rem 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  margin-top: 20rem;
+  background: transparent;
+}
+
+/* Timeline section styling */
+.timeline-section {
+  position: relative;
+  z-index: 5;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(57, 255, 20, 0.05);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.05);
+  font-family: 'Play', sans-serif;
+}
+
+/* Background paths section */
+.bg-black.path-section {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  margin-bottom: 0;
+}
+
+/* Handle potential widget overlay conflicts */
+#VG_OVERLAY_CONTAINER {
+  z-index: 999 !important;
+  position: absolute !important;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .content-layer {
+    padding-top: calc(140px + 10rem);
+  }
+  
+  .hero-section {
+    min-height: calc(100vh - 140px);
+    padding: 10rem 0;
+    align-items: center;
+    margin-top: 25rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .nav-layer {
+    padding: 1rem 0;
+  }
+
+  .hero-section {
+    padding-top: 8rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+  
+  .hero-section p {
+    font-size: 1.125rem;
+  }
+  
+  .bg-black.path-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Additional mobile optimization */
+@media (max-height: 700px) and (max-width: 639px) {
+  .hero-section {
+    padding-top: 9rem;
+  }
+  
+  .content-layer {
+    padding-top: calc(100px + 5rem);
+  }
+}
+
+/* Modified card-gradient for service boxes */
+.card-gradient {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid white;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.card-gradient:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(57, 255, 20, 0.8);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.7);
+}
+
+.card-gradient h3,
+.card-gradient p,
+.card-gradient span {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Card content styling for all card types */
+.card-content {
+  position: relative;
+  z-index: 2;
+  font-family: 'Play', sans-serif;
+  text-align: center;
+}
+
+.card-content h3,
+.card-content p {
+  text-align: center;
+  font-family: 'Play', sans-serif;
+}
+
+/* Special animated GIF background for "Why Wait Any Longer?" section cards */
+.animated-card {
+  position: relative;
+  border: 1px solid rgba(57, 255, 20, 0.15);
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.animated-card:hover {
+  border-color: rgba(57, 255, 20, 0.4);
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+}
+
+.animated-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://storage.googleapis.com/msgsndr/z0CvZ5GwZ3i1oWGetv2j/media/67cc051d2d586756833320bb.gif');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.35;
+  z-index: -1;
+}
+
+.animated-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85));
+  z-index: -1;
+}
+
+.animated-card:hover::before {
+  opacity: 0.5;
+  transform: scale(1.05);
+  transition: all 0.5s ease;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
