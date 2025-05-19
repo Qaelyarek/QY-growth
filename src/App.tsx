@@ -3,6 +3,7 @@ import { PhoneCall } from './components/PhoneCall';
 import { Terminal, ArrowUpRight } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Contact from './pages/Contact';
+import Services from './pages/Services';
 
 function HomePage() {
   return (
@@ -47,9 +48,36 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-black text-white">
-        <div className="pt-4">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <Link to="/" className="flex items-center">
+                <Terminal className="w-8 h-8 text-[#39FF14] mr-2" />
+                <img src="./assets/White-QY-logo.png" alt="QY-Growth Logo" className="h-8" />
+              </Link>
+              
+              <div className="flex items-center space-x-6">
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors">
+                  Home
+                </Link>
+                <Link to="/services" className="text-gray-300 hover:text-white transition-colors">
+                  Services
+                </Link>
+                <Link to="#" className="text-gray-300 hover:text-white transition-colors">
+                  About
+                </Link>
+                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">
+                  Contact
+                </Link>
+              </div>
+            </div>
+          </div>
+        </nav>
+        
+        <div className="pt-16">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
@@ -61,12 +89,12 @@ function App() {
                 Home
               </Link>
               <span>•</span>
-              <Link to="#" className="hover:text-white transition-colors">
-                About
+              <Link to="/services" className="hover:text-white transition-colors">
+                Services
               </Link>
               <span>•</span>
               <Link to="#" className="hover:text-white transition-colors">
-                Services
+                About
               </Link>
               <span>•</span>
               <Link to="/contact" className="hover:text-white transition-colors">
