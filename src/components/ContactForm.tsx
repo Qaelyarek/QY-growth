@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Send, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { env } from '../lib/env';
 
 // Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
 
 // Service options based on database schema
 const SERVICE_OPTIONS = [
