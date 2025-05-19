@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Mic, MicOff, MessageSquare, Volume2, Bot, Loader2 } from 'lucide-react';
-import { generateSpeech } from '../lib/elevenlabs';
-import { generateResponse } from '../lib/openai';
 import { VoiceVisualization } from './ui/voice-visualization';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
@@ -76,89 +74,40 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
 
   const speakText = async (text: string) => {
     setIsSpeaking(true);
+    setVolume(0.7);
 
-    try {
-      const audio = await generateSpeech(text, 'agent_01jvepganyex89bnx4dcaf7qtg');
-      
-      if (audio) {
-        const audioBlob = new Blob([audio], { type: 'audio/mpeg' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audioElement = new Audio(audioUrl);
-        
-        // Create audio context for volume analysis
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaElementSource(audioElement);
-        const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
+    const utterance = new SpeechSynthesisUtterance(text);
+    let voices = speechSynthesis.getVoices();
+    
+    if (voices.length === 0) {
+      await new Promise<void>(resolve => {
+        speechSynthesis.onvoiceschanged = () => {
+          voices = speechSynthesis.getVoices();
+          resolve();
+        };
+      });
+    }
 
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        
-        const updateVolume = () => {
-          analyser.getByteFrequencyData(dataArray);
-          const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-          setVolume(average / 255);
-          if (isSpeaking) {
-            requestAnimationFrame(updateVolume);
-          }
-        };
-        
-        audioElement.onplay = () => {
-          updateVolume();
-        };
-        
-        audioElement.onended = () => {
-          setIsSpeaking(false);
-          setVolume(0.5);
-          URL.revokeObjectURL(audioUrl);
-          audioContext.close();
-        };
-        
-        await audioElement.play();
-      } else {
-        const utterance = new SpeechSynthesisUtterance(text);
-        
-        let voices = speechSynthesis.getVoices();
-        if (voices.length === 0) {
-          await new Promise<void>(resolve => {
-            speechSynthesis.onvoiceschanged = () => {
-              voices = speechSynthesis.getVoices();
-              resolve();
-            };
-          });
-        }
-        
-        const femaleVoice = voices.find(voice => 
-          voice.name.includes('Female') || 
-          voice.name.includes('Samantha') || 
-          voice.name.includes('Google UK English Female')
-        );
-        
-        if (femaleVoice) {
-          utterance.voice = femaleVoice;
-        }
-        
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-        
-        utterance.onstart = () => {
-          setVolume(0.7);
-        };
-        
-        utterance.onend = () => {
-          setIsSpeaking(false);
-          setVolume(0.5);
-        };
-        
-        speechSynthesis.speak(utterance);
-      }
-    } catch (error) {
-      console.error('Speech synthesis error:', error);
+    const femaleVoice = voices.find(voice => 
+      voice.name.includes('Female') || 
+      voice.name.includes('Samantha') || 
+      voice.name.includes('Google UK English Female')
+    );
+
+    if (femaleVoice) {
+      utterance.voice = femaleVoice;
+    }
+
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onend = () => {
       setIsSpeaking(false);
       setVolume(0.5);
-    }
+    };
+
+    speechSynthesis.speak(utterance);
   };
 
   const processUserInput = async (input: string) => {
@@ -166,9 +115,9 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
     setIsProcessing(true);
     
     try {
-      const aiResponse = await generateResponse(input);
-      setMessages(prev => [...prev, { type: 'ai', text: aiResponse }]);
-      await speakText(aiResponse);
+      const response = "I'm now using the web browser's built-in speech synthesis. For a more advanced AI conversation, please use the Call AI Agent button.";
+      setMessages(prev => [...prev, { type: 'ai', text: response }]);
+      await speakText(response);
     } catch (error) {
       console.error('Error processing user input:', error);
       const errorMessage = "I apologize, but I'm having trouble processing your request. Please try again.";
