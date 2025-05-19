@@ -6,6 +6,7 @@ import Schedule from './pages/Schedule';
 import { TypewriterLogo } from './components/ui/typewriter-logo';
 import { BackgroundPaths } from './components/ui/background-paths';
 import { VoiceAssistant } from './components/VoiceAssistant';
+import { PhoneCall } from './components/PhoneCall';
 import { toast } from 'react-hot-toast';
 import { isElevenLabsConfigured } from './lib/env';
 import qyLogo from '/assets/White-QY-logo.png';
@@ -16,16 +17,12 @@ function Home() {
   const [isVoiceActive, setIsVoiceActive] = useState(false);
 
   const activateVoiceAssistant = () => {
-    // Check if ElevenLabs API key is set
     if (!isElevenLabsConfigured()) {
       toast.warning('ElevenLabs API key is not set. Voice will use browser capabilities instead.');
     }
-    
-    // Use our custom component
     setIsVoiceActive(true);
   };
 
-  // Listen for activateVoiceAssistant events from BackgroundPaths component
   useEffect(() => {
     const handleActivateVoice = () => {
       activateVoiceAssistant();
@@ -80,14 +77,9 @@ function Home() {
               <p className="text-xl text-blue-200 mb-8 bg-black/20">
                 Experience our premium AI voice technology for inbound calls, outbound calls, SMS, and chat
               </p>
-              <button
-                onClick={activateVoiceAssistant}
-                className="bg-[#39FF14] text-black px-8 py-4 text-lg font-semibold hover:bg-[#32CC11] transition-all inline-flex items-center space-x-2 rounded shadow-[0_0_10px_rgba(57,255,20,0.5)] pulsating-button"
-              >
-                <Mic className="w-6 h-6" />
-                <span>Try Voice AI Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <PhoneCall />
+              </div>
             </div>
           </div>
 
