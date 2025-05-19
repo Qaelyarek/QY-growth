@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",
-    "@vapi-ai/web": "^1.2.1",
+    "@vapi-ai/web": "1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "daily-js": "0.67.3",
