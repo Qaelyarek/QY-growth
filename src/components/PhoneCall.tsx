@@ -140,12 +140,19 @@ export function PhoneCall() {
       </AnimatePresence>
 
       {/* Main call button with StarBorder */}
-      <StarBorder variant={isCallActive ? "active" : "default"} size="lg" className="rounded-full">
+      <StarBorder 
+        variant={isCallActive ? "active" : "default"} 
+        size="lg" 
+        className={`
+          rounded-full shadow-[0_0_25px_rgba(57,255,20,0.3)] 
+          ${isCallActive ? 'shadow-[0_0_25px_rgba(255,255,255,0.2)]' : 'shadow-[0_0_25px_rgba(57,255,20,0.3)]'}
+        `}
+      >
         <motion.button
           onClick={toggleCall}
           disabled={isInitializing}
           className={`
-            relative z-10 px-8 py-4 text-lg font-semibold
+            relative z-10 px-10 py-4 text-lg font-bold
             rounded-full transition-all duration-300
             inline-flex items-center space-x-3
             ${isCallActive 

@@ -4,12 +4,12 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "../../lib/utils"
  
 const starBorderVariants = cva(
-  "relative z-0 inline-flex overflow-hidden rounded-md border border-border before:absolute before:inset-0 before:-z-[1] before:rounded-[inherit] before:animate-star-border before:bg-[linear-gradient(90deg,transparent,rgba(57,255,20,0.5),transparent)] before:bg-[length:400%_100%]",
+  "relative z-0 inline-flex overflow-hidden rounded-md border before:absolute before:inset-0 before:-z-[1] before:rounded-[inherit] before:animate-star-border before:bg-[linear-gradient(90deg,transparent,rgba(57,255,20,0.8),transparent)] before:bg-[length:400%_100%]",
   {
     variants: {
       variant: {
-        default: "border-[#39FF14]/20",
-        active: "border-[#39FF14]/50",
+        default: "border-[#39FF14]/30",
+        active: "border-[#39FF14]/70 before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent)]",
       },
       size: {
         default: "p-[1px]",
