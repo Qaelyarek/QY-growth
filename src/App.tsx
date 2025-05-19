@@ -4,6 +4,7 @@ import { Terminal, ArrowUpRight } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Contact from './pages/Contact';
 import Services from './pages/Services';
+import About from './pages/About';
 
 function HomePage() {
   return (
@@ -63,7 +64,7 @@ function App() {
                 <Link to="/services" className="text-gray-300 hover:text-white transition-colors">
                   Services
                 </Link>
-                <Link to="#" className="text-gray-300 hover:text-white transition-colors">
+                <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
                   About
                 </Link>
                 <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">
@@ -79,6 +80,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </div>
         
@@ -93,7 +95,7 @@ function App() {
                 Services
               </Link>
               <span>•</span>
-              <Link to="#" className="hover:text-white transition-colors">
+              <Link to="/about" className="hover:text-white transition-colors">
                 About
               </Link>
               <span>•</span>
