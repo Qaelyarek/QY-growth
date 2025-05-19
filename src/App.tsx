@@ -47,7 +47,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-black text-white">
-        <div className="pt-16">
+        <div className="pt-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/contact" element={<Contact />} />
