@@ -6,6 +6,7 @@ import Schedule from './pages/Schedule';
 import { TypewriterLogo } from './components/ui/typewriter-logo';
 import { BackgroundPaths } from './components/ui/background-paths';
 import { PhoneCall } from './components/PhoneCall';
+import { motion } from 'framer-motion';
 import qyLogo from '/assets/White-QY-logo.png';
 import igLogo from '/assets/IG logo.png';
 import xLogo from '/assets/X logo.png';
@@ -29,9 +30,22 @@ function Home() {
                 </a>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <span className="text-blue-400 text-sm bg-gray-900/50 px-3 py-1.5 rounded-full text-center">
-                  AI VOICE AGENT TESTING
-                </span>
+                <div className="flex items-center gap-2 bg-gray-900/50 px-3 py-1.5 rounded-full">
+                  <motion.div
+                    animate={{ 
+                      y: [-2, 2, -2],
+                      rotate: [-5, 5, -5]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <Phone className="w-4 h-4 text-blue-400" />
+                  </motion.div>
+                  <span className="text-blue-400 text-sm">AI VOICE AGENT TESTING</span>
+                </div>
               </div>
             </div>
           </div>
