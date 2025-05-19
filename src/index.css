@@ -54,3 +54,13 @@ body {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
+
+/* Text cycling animation specific styles */
+.text-cycle-container {
+  @apply relative inline-block;
+}
+
+.text-cycle-item {
+  @apply absolute inset-0 flex items-center justify-center transition-opacity duration-500;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

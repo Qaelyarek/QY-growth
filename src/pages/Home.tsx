@@ -1,11 +1,9 @@
 import React from 'react';
-import { PhoneCall } from './components/PhoneCall';
-import { Terminal, ArrowUpRight } from 'lucide-react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Contact from './pages/Contact';
-import AnimatedTextCycle from './components/ui/animated-text-cycle';
+import { Terminal } from 'lucide-react';
+import { PhoneCall } from '../components/PhoneCall';
+import AnimatedTextCycle from '../components/ui/animated-text-cycle';
 
-function HomePage() {
+export default function Home() {
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4">
       {/* Subtle grid background */}
@@ -24,7 +22,7 @@ function HomePage() {
         <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-400">
           <AnimatedTextCycle 
             words={[
-              "Revolutionizing Business Growth",
+              "Revolutionizing Business",
               "Enhancing Customer Engagement",
               "Transforming Sales Operations",
               "Automating Repetitive Tasks"
@@ -52,43 +50,3 @@ function HomePage() {
     </div>
   );
 }
-
-function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-black text-white">
-        <div className="pt-4">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </div>
-        
-        <footer className="bg-black/70 border-t border-white/10 py-8">
-          <div className="max-w-7xl mx-auto px-4 text-center text-gray-400">
-            <div className="flex items-center justify-center gap-4 text-sm mb-4">
-              <Link to="/" className="hover:text-white transition-colors">
-                Home
-              </Link>
-              <span>•</span>
-              <Link to="#" className="hover:text-white transition-colors">
-                About
-              </Link>
-              <span>•</span>
-              <Link to="#" className="hover:text-white transition-colors">
-                Services
-              </Link>
-              <span>•</span>
-              <Link to="/contact" className="hover:text-white transition-colors">
-                Contact
-              </Link>
-            </div>
-            <p className="text-sm">© {new Date().getFullYear()} QY-Growth. All rights reserved.</p>
-          </div>
-        </footer>
-      </div>
-    </Router>
-  );
-}
-
-export default App;
