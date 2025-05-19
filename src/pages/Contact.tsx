@@ -33,32 +33,6 @@ export default function Contact() {
         </div>
 
         <ContactForm />
-
-        <div className="mt-16 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-black/30 backdrop-blur-sm p-6 rounded-lg border border-white/10 text-center">
-            <h3 className="font-bold text-xl mb-3 text-[#39FF14]">Email Us</h3>
-            <p className="text-gray-300">
-              For general inquiries: <br />
-              <a href="mailto:info@qy-growth.com" className="hover:text-[#39FF14] transition-colors">info@qy-growth.com</a>
-            </p>
-          </div>
-          
-          <div className="bg-black/30 backdrop-blur-sm p-6 rounded-lg border border-white/10 text-center">
-            <h3 className="font-bold text-xl mb-3 text-[#39FF14]">Call Us</h3>
-            <p className="text-gray-300">
-              Customer Support: <br />
-              <a href="tel:+14155550123" className="hover:text-[#39FF14] transition-colors">+1 (415) 555-0123</a>
-            </p>
-          </div>
-          
-          <div className="bg-black/30 backdrop-blur-sm p-6 rounded-lg border border-white/10 text-center">
-            <h3 className="font-bold text-xl mb-3 text-[#39FF14]">Visit Us</h3>
-            <p className="text-gray-300">
-              123 AI Innovation Drive <br />
-              San Francisco, CA 94105
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );
