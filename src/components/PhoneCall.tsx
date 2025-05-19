@@ -144,8 +144,11 @@ export function PhoneCall() {
         variant={isCallActive ? "active" : "default"} 
         size="lg" 
         className={`
-          rounded-full shadow-[0_0_25px_rgba(57,255,20,0.3)] 
-          ${isCallActive ? 'shadow-[0_0_25px_rgba(255,255,255,0.2)]' : 'shadow-[0_0_25px_rgba(57,255,20,0.3)]'}
+          rounded-full
+          ${isCallActive 
+            ? 'shadow-glow-white' 
+            : 'shadow-glow-green'
+          }
         `}
       >
         <motion.button

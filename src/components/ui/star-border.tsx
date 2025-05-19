@@ -9,7 +9,7 @@ const starBorderVariants = cva(
     variants: {
       variant: {
         default: "border-[#39FF14]/30",
-        active: "border-[#39FF14]/70 before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent)]",
+        active: "border-white/30 before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent)]",
       },
       size: {
         default: "p-[1px]",
