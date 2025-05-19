@@ -1,6 +1,8 @@
 export const env = {
-  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY
+  VAPI_PUBLIC_KEY: import.meta.env.VITE_VAPI_PUBLIC_KEY as string,
+  VAPI_ASSISTANT_ID: import.meta.env.VITE_VAPI_ASSISTANT_ID as string
 };
 
-export const isElevenLabsConfigured = () => false;
+if (!env.VAPI_PUBLIC_KEY || !env.VAPI_ASSISTANT_ID) {
+  throw new Error('Missing required VAPI environment variables');
+}

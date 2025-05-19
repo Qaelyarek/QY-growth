@@ -3,8 +3,9 @@ import Vapi from '@vapi-ai/web';
 import { Phone, PhoneOff } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { env } from '../lib/env';
 
-const vapi = new Vapi('59daf631-d47d-4697-8ad5-ba84ec36eaa7');
+const vapi = new Vapi(env.VAPI_PUBLIC_KEY);
 
 export function PhoneCall() {
   const [isCallActive, setIsCallActive] = useState(false);
@@ -40,7 +41,7 @@ export function PhoneCall() {
 
   const startCall = async () => {
     try {
-      await vapi.start('d7f2e641-d690-412d-b8b0-db973ff0d937');
+      await vapi.start(env.VAPI_ASSISTANT_ID);
     } catch (error) {
       console.error('Failed to start call:', error);
       toast.error('Failed to start call');
