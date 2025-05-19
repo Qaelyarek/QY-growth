@@ -77,8 +77,16 @@ function Home() {
               <p className="text-xl text-blue-200 mb-8 bg-black/20">
                 Experience our premium AI voice technology for inbound calls, outbound calls, SMS, and chat
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <PhoneCall />
+                <button
+                  onClick={activateVoiceAssistant}
+                  className="bg-[#39FF14] text-black px-8 py-4 text-lg font-semibold hover:bg-[#32CC11] transition-all inline-flex items-center space-x-2 rounded shadow-[0_0_10px_rgba(57,255,20,0.5)] pulsating-button"
+                >
+                  <Mic className="w-6 h-6" />
+                  <span>Try Voice AI Now</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
