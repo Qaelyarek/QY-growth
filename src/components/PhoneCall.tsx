@@ -62,34 +62,47 @@ export function PhoneCall() {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Call activity visualization */}
+      {/* Voice activity visualization */}
       <AnimatePresence>
         {isCallActive && (
-          <>
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* Circular waves */}
+            {[...Array(3)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full border border-white/20"
+                initial={{ width: '100%', height: '100%', opacity: 0 }}
+                animate={{
+                  width: ['100%', '150%'],
+                  height: ['100%', '150%'],
+                  opacity: [0.5, 0],
+                  scale: [1, 1.5]
+                }}
+                transition={{
+                  duration: 2,
+                  delay: i * 0.4,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+            ))}
+            
+            {/* Voice level indicator */}
             <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.3 }}
-              exit={{ scale: 0, opacity: 0 }}
-              className="absolute -inset-8 bg-gradient-to-r from-[#39FF14]/20 to-blue-500/20 blur-xl rounded-full"
-              style={{
-                transform: `scale(${1 + volume * 0.5})`,
+              className="absolute inset-0 bg-white/5 rounded-full backdrop-blur-sm"
+              animate={{
+                scale: 1 + volume * 0.3,
               }}
-            />
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: [1, 1.2, 1],
-                opacity: [0.2, 0.4, 0.2]
-              }}
-              exit={{ scale: 0, opacity: 0 }}
               transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
+                duration: 0.2,
               }}
-              className="absolute -inset-4 bg-red-500/20 blur-lg rounded-full"
             />
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -98,36 +111,23 @@ export function PhoneCall() {
         onClick={toggleCall}
         className={`
           relative z-10 px-8 py-4 text-lg font-semibold
-          rounded-full transition-colors duration-300
+          rounded-full transition-all duration-300
           inline-flex items-center space-x-3
+          border-2
           ${isCallActive 
-            ? 'bg-red-500 hover:bg-red-600 text-white' 
-            : 'bg-[#39FF14] hover:bg-[#32CC11] text-black'
+            ? 'bg-black border-white/50 text-white hover:border-white' 
+            : 'bg-white border-black text-black hover:bg-black hover:text-white'
           }
         `}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        animate={isCallActive ? {
-          boxShadow: [
-            '0 0 20px rgba(239,68,68,0.3)',
-            '0 0 40px rgba(239,68,68,0.5)',
-            '0 0 20px rgba(239,68,68,0.3)'
-          ]
-        } : {
-          boxShadow: [
-            '0 0 20px rgba(57,255,20,0.3)',
-            '0 0 40px rgba(57,255,20,0.5)',
-            '0 0 20px rgba(57,255,20,0.3)'
-          ]
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
       >
         {isCallActive ? (
           <PhoneOff className="w-6 h-6" />
         ) : (
           <Phone className="w-6 h-6" />
         )}
-        <span className="font-semibold">
+        <span>
           {isCallActive ? 'End Call' : 'Call AI Agent'}
         </span>
       </motion.button>
