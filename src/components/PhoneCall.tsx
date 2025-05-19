@@ -4,6 +4,7 @@ import { Phone, PhoneOff, Wand2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { env } from '../lib/env';
+import { StarBorder } from './ui/star-border';
 
 const vapi = new Vapi(env.VAPI_PUBLIC_KEY);
 
@@ -138,47 +139,47 @@ export function PhoneCall() {
         )}
       </AnimatePresence>
 
-      {/* Main call button */}
-      <motion.button
-        onClick={toggleCall}
-        disabled={isInitializing}
-        className={`
-          relative z-10 px-8 py-4 text-lg font-semibold
-          rounded-full transition-all duration-300
-          inline-flex items-center space-x-3
-          border-2
-          ${isCallActive 
-            ? 'bg-black border-white/50 text-white hover:border-white' 
-            : isInitializing
-              ? 'bg-gray-800 border-gray-700 text-gray-400 cursor-wait'
-              : 'bg-[#39FF14] border-[#39FF14] text-black hover:bg-[#32CC11]'
-          }
-          shadow-[0_0_20px_rgba(57,255,20,0.3)]
-        `}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        {isCallActive ? (
-          <PhoneOff className="w-6 h-6" />
-        ) : isInitializing ? (
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          >
-            <Wand2 className="w-6 h-6" />
-          </motion.div>
-        ) : (
-          <Phone className="w-6 h-6" />
-        )}
-        <span>
-          {isCallActive 
-            ? 'End Call' 
-            : isInitializing
-              ? 'Connecting...'
-              : 'Talk to AI Agent'
-          }
-        </span>
-      </motion.button>
+      {/* Main call button with StarBorder */}
+      <StarBorder variant={isCallActive ? "active" : "default"} size="lg" className="rounded-full">
+        <motion.button
+          onClick={toggleCall}
+          disabled={isInitializing}
+          className={`
+            relative z-10 px-8 py-4 text-lg font-semibold
+            rounded-full transition-all duration-300
+            inline-flex items-center space-x-3
+            ${isCallActive 
+              ? 'bg-black text-white hover:bg-black/80' 
+              : isInitializing
+                ? 'bg-gray-800 text-gray-400 cursor-wait'
+                : 'bg-[#39FF14] text-black hover:bg-[#32CC11]'
+            }
+          `}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isCallActive ? (
+            <PhoneOff className="w-6 h-6" />
+          ) : isInitializing ? (
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              <Wand2 className="w-6 h-6" />
+            </motion.div>
+          ) : (
+            <Phone className="w-6 h-6" />
+          )}
+          <span>
+            {isCallActive 
+              ? 'End Call' 
+              : isInitializing
+                ? 'Connecting...'
+                : 'Talk to AI Agent'
+            }
+          </span>
+        </motion.button>
+      </StarBorder>
 
       {/* Status text */}
       <motion.p
