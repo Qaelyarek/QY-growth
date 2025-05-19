@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { Bot, Terminal, Phone, MessageSquare, Headphones, ChevronRight, Shield, Clock, Zap, Layers } from 'lucide-react';
 import ConsultationForm from './pages/ConsultationForm';
@@ -6,7 +6,6 @@ import Schedule from './pages/Schedule';
 import { TypewriterLogo } from './components/ui/typewriter-logo';
 import { BackgroundPaths } from './components/ui/background-paths';
 import { PhoneCall } from './components/PhoneCall';
-import { toast } from 'react-hot-toast';
 import qyLogo from '/assets/White-QY-logo.png';
 import igLogo from '/assets/IG logo.png';
 import xLogo from '/assets/X logo.png';
@@ -40,17 +39,14 @@ function Home() {
 
         <main className="content-layer">
           <div className="hero-section px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto bg-black/30 backdrop-blur-sm p-8 rounded-lg">
+            <div className="text-center max-w-4xl mx-auto bg-black/30 backdrop-blur-sm p-8 rounded-lg border border-white/10">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
                 Experience Our AI Voice Agent
               </h1>
-              <p className="text-xl text-blue-200 mb-8 bg-black/20">
+              <p className="text-xl text-blue-200 mb-12">
                 Talk directly with our advanced AI voice technology - natural conversations powered by cutting-edge AI
               </p>
-              <div className="relative">
-                <div className="absolute inset-0 bg-[#39FF14]/20 blur-3xl rounded-full"></div>
-                <PhoneCall />
-              </div>
+              <PhoneCall />
             </div>
           </div>
 
