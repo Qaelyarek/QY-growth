@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { Bot, Terminal, Phone, MessageSquare, Headphones, ChevronRight, Shield, Clock, Zap, Layers } from 'lucide-react';
+import { Bot, Terminal, Phone, MessageSquare, Headphones, ChevronRight, Shield, Clock, Zap, Layers, Mic } from 'lucide-react';
 import ConsultationForm from './pages/ConsultationForm';
 import Schedule from './pages/Schedule';
 import { TypewriterLogo } from './components/ui/typewriter-logo';
@@ -33,6 +33,19 @@ function Home() {
                 <span className="text-blue-400 text-sm bg-gray-900/50 px-3 py-1.5 rounded-full text-center">
                   AI VOICE AGENT TESTING
                 </span>
+                <button 
+                  onClick={() => {
+                    const voiceActivateEvent = new CustomEvent('activateVoiceAssistant');
+                    document.dispatchEvent(voiceActivateEvent);
+                  }}
+                  className="relative group overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#39FF14] via-blue-500 to-[#39FF14] opacity-75 group-hover:opacity-100 blur-xl transition-opacity duration-500 animate-pulse"></div>
+                  <div className="relative bg-[#39FF14] hover:bg-[#32CC11] text-black px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 shadow-[0_0_15px_rgba(57,255,20,0.3)] hover:shadow-[0_0_25px_rgba(57,255,20,0.5)]">
+                    <Mic className="w-5 h-5" />
+                    <span className="font-semibold">Speak to AI</span>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
