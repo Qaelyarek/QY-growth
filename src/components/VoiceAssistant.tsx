@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Mic, MicOff, MessageSquare, Volume2, Bot, Loader2 } from 'lucide-react';
 import { generateSpeech } from '../lib/elevenlabs';
 import { generateResponse } from '../lib/openai';
+import { VoiceVisualization } from './ui/voice-visualization';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 interface VoiceAssistantProps {
@@ -12,6 +13,7 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [volume, setVolume] = useState(0.5);
   const [messages, setMessages] = useState<{ type: 'user' | 'ai'; text: string }[]>([
     { type: 'ai', text: 'Hello! I\'m the QYGrowth AI Voice Assistant. How can I help you today?' }
   ]);
@@ -26,7 +28,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
   } = useSpeechRecognition();
 
   useEffect(() => {
-    // Welcome message voice
     setTimeout(() => {
       speakText('Hello! I\'m the QYGrowth AI Voice Assistant. How can I help you today?');
     }, 500);
@@ -77,7 +78,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
     setIsSpeaking(true);
 
     try {
-      // Try ElevenLabs first
       const audio = await generateSpeech(text, 'agent_01jvepganyex89bnx4dcaf7qtg');
       
       if (audio) {
@@ -85,20 +85,42 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
         const audioUrl = URL.createObjectURL(audioBlob);
         const audioElement = new Audio(audioUrl);
         
+        // Create audio context for volume analysis
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaElementSource(audioElement);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        
+        const updateVolume = () => {
+          analyser.getByteFrequencyData(dataArray);
+          const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+          setVolume(average / 255);
+          if (isSpeaking) {
+            requestAnimationFrame(updateVolume);
+          }
+        };
+        
+        audioElement.onplay = () => {
+          updateVolume();
+        };
+        
         audioElement.onended = () => {
           setIsSpeaking(false);
+          setVolume(0.5);
           URL.revokeObjectURL(audioUrl);
+          audioContext.close();
         };
         
         await audioElement.play();
       } else {
-        // Fallback to Web Speech API
         const utterance = new SpeechSynthesisUtterance(text);
         
-        // Get available voices
         let voices = speechSynthesis.getVoices();
         if (voices.length === 0) {
-          // Wait for voices to load if they haven't yet
           await new Promise<void>(resolve => {
             speechSynthesis.onvoiceschanged = () => {
               voices = speechSynthesis.getVoices();
@@ -107,7 +129,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
           });
         }
         
-        // Try to find a female voice
         const femaleVoice = voices.find(voice => 
           voice.name.includes('Female') || 
           voice.name.includes('Samantha') || 
@@ -122,8 +143,13 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
         
+        utterance.onstart = () => {
+          setVolume(0.7);
+        };
+        
         utterance.onend = () => {
           setIsSpeaking(false);
+          setVolume(0.5);
         };
         
         speechSynthesis.speak(utterance);
@@ -131,23 +157,17 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
     } catch (error) {
       console.error('Speech synthesis error:', error);
       setIsSpeaking(false);
+      setVolume(0.5);
     }
   };
 
   const processUserInput = async (input: string) => {
-    // Add user message
     setMessages(prev => [...prev, { type: 'user', text: input }]);
-    
     setIsProcessing(true);
     
     try {
-      // Get AI response using OpenAI
       const aiResponse = await generateResponse(input);
-      
-      // Add AI response to messages
       setMessages(prev => [...prev, { type: 'ai', text: aiResponse }]);
-      
-      // Speak the response
       await speakText(aiResponse);
     } catch (error) {
       console.error('Error processing user input:', error);
@@ -162,7 +182,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
       <div className="bg-black border border-[#39FF14]/30 rounded-xl shadow-[0_0_30px_rgba(57,255,20,0.3)] w-full max-w-lg overflow-hidden">
-        {/* Header */}
         <div className="bg-gradient-to-r from-black to-gray-900 p-4 flex justify-between items-center border-b border-[#39FF14]/20">
           <div className="flex items-center space-x-2">
             <Bot className="w-6 h-6 text-[#39FF14]" />
@@ -176,7 +195,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Welcome overlay - shown briefly */}
         {showWelcome && (
           <div 
             className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-10 animate-fadeOut"
@@ -190,7 +208,6 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
           </div>
         )}
 
-        {/* Messages area */}
         <div className="p-4 h-80 overflow-y-auto bg-gray-900/50">
           <div className="space-y-4">
             {messages.map((message, index) => (
@@ -219,32 +236,38 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Status indicator */}
-        <div className="px-4 py-2 bg-black/70 border-t border-[#39FF14]/20 flex items-center">
-          {isProcessing ? (
-            <div className="flex items-center text-blue-400 text-sm">
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Processing...
+        <div className="px-4 py-2 bg-black/70 border-t border-[#39FF14]/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              {isProcessing ? (
+                <div className="flex items-center text-blue-400 text-sm">
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Processing...
+                </div>
+              ) : isSpeaking ? (
+                <div className="flex items-center text-[#39FF14] text-sm">
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  Speaking...
+                </div>
+              ) : isListening ? (
+                <div className="flex items-center text-red-400 text-sm">
+                  <Mic className="w-4 h-4 mr-2 animate-pulse" />
+                  Listening...
+                </div>
+              ) : (
+                <div className="flex items-center text-gray-400 text-sm">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Ready
+                </div>
+              )}
             </div>
-          ) : isSpeaking ? (
-            <div className="flex items-center text-[#39FF14] text-sm">
-              <Volume2 className="w-4 h-4 mr-2" />
-              Speaking...
-            </div>
-          ) : isListening ? (
-            <div className="flex items-center text-red-400 text-sm">
-              <Mic className="w-4 h-4 mr-2 animate-pulse" />
-              Listening...
-            </div>
-          ) : (
-            <div className="flex items-center text-gray-400 text-sm">
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Ready
-            </div>
-          )}
+            <VoiceVisualization 
+              isActive={isSpeaking || isListening} 
+              volume={volume}
+            />
+          </div>
         </div>
 
-        {/* Input area */}
         <div className="p-4 bg-gray-900/30 border-t border-gray-800">
           <div className="flex items-center">
             <div className="flex-1 border border-gray-700 rounded-lg bg-black/50 p-3 relative">
