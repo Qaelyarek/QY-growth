@@ -14,7 +14,7 @@
     "@vapi-ai/web": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "daily-js": "^0.67.3",
+    "daily-js": "0.67.3",
     "date-fns": "^3.3.1",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.344.0",
