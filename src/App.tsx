@@ -3,7 +3,6 @@ import { PhoneCall } from './components/PhoneCall';
 import { Terminal, ArrowUpRight } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Contact from './pages/Contact';
-import AnimatedTextCycle from './components/ui/animated-text-cycle';
 
 function HomePage() {
   return (
@@ -22,16 +21,7 @@ function HomePage() {
         </div>
         
         <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-400">
-          <AnimatedTextCycle 
-            words={[
-              "Revolutionizing Business Growth",
-              "Enhancing Customer Engagement",
-              "Transforming Sales Operations",
-              "Automating Repetitive Tasks"
-            ]}
-            interval={4000}
-            className="text-white"
-          /> with AI
+          Revolutionizing Business Growth with AI
         </h2>
         
         <div className="bg-black/30 backdrop-blur-sm p-6 rounded-lg border border-white/10 mb-12 max-w-2xl mx-auto">
