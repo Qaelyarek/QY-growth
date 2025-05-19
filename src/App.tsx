@@ -52,7 +52,7 @@ function App() {
             <div className="flex items-center justify-between">
               <Link to="/" className="flex items-center">
                 <Terminal className="w-8 h-8 text-[#39FF14] mr-2" />
-                <img src="/assets/White-QY-logo.png" alt="QY-Growth Logo" className="h-8" />
+                <img src="./assets/White-QY-logo.png" alt="QY-Growth Logo" className="h-8" />
               </Link>
               
               <div className="flex items-center space-x-6">
