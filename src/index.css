@@ -11,6 +11,11 @@ body {
   @apply bg-black text-white font-sans;
 }
 
+/* Hide top navigation bar */
+.top-nav, #header-nav {
+  display: none !important;
+}
+
 /* Glowing effect for buttons */
 .shadow-glow {
   box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
