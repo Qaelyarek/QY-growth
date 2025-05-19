@@ -62,34 +62,6 @@ export function PhoneCall() {
 
   return (
     <div className="relative flex flex-col items-center">
-      {/* Floating phone animation when not in call */}
-      <AnimatePresence>
-        {!isCallActive && (
-          <motion.div
-            initial={{ y: 0 }}
-            animate={{ y: [-10, 0, -10] }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute -top-16"
-          >
-            <motion.div
-              animate={{ rotate: [-5, 5, -5] }}
-              transition={{ 
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="bg-[#39FF14]/10 p-4 rounded-full backdrop-blur-sm"
-            >
-              <Phone className="w-8 h-8 text-[#39FF14]" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Call activity visualization */}
       <AnimatePresence>
         {isCallActive && (
@@ -150,18 +122,11 @@ export function PhoneCall() {
         }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <motion.div
-          animate={!isCallActive ? {
-            rotate: [0, 15, -15, 0]
-          } : {}}
-          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
-        >
-          {isCallActive ? (
-            <PhoneOff className="w-6 h-6" />
-          ) : (
-            <Phone className="w-6 h-6" />
-          )}
-        </motion.div>
+        {isCallActive ? (
+          <PhoneOff className="w-6 h-6" />
+        ) : (
+          <Phone className="w-6 h-6" />
+        )}
         <span className="font-semibold">
           {isCallActive ? 'End Call' : 'Call AI Agent'}
         </span>
